@@ -10,14 +10,19 @@ manzilini kutyapti.** Quyidagilar qolgan — tartib bo'yicha.
       ⚠️ `uysot-pulse.up.railway.app` — bu `apps/web` FRONTEND (har yo'lga HTML qaytaradi), API EMAS.
       ⚠️ `tricycle-dial-related.ngrok-free.dev` — virtual kompyuterdagi DEV tunnel, prod EMAS.
 - [x] `landing/.env` va `landing/.env.example` → `VITE_API_BASE` yozildi; 3 ta tugma ham prod'ga.
-- [ ] **Vercel** → Settings → Environment Variables →
-      `VITE_API_BASE=https://uysot-pulse-api.up.railway.app` → **Redeploy**
+- [x] **Vercel** → `VITE_API_BASE=https://uysot-pulse-api.up.railway.app` (Config turi) — deploy
+      qilindi: **https://pulse-eta-lac.vercel.app** (tugma prod API'ga, tekshirilgan).
       (qiymat build paytida JS'ga yoziladi — o'zgartirilsa ham qayta deploy kerak).
-- [ ] **Railway** (api) → `OAUTH_RETURN_TO_ORIGINS=https://<landing Vercel domeni>`.
+- [ ] **Railway** (api) → `OAUTH_RETURN_TO_ORIGINS=https://pulse-eta-lac.vercel.app`.
       Usiz ulanish ishlaydi, lekin mijoz landing'ga qaytmaydi (tugma "Pulse'ni ochish" bo'lmaydi,
       xato xabari chiqmaydi).
 - [ ] Prod'da sinash: yangi brauzerda tugma → UYSOT ruxsat → CRM ochildi → landing'ni qayta ochganda
       tugma "Pulse'ni ochish". "Rad etish" bosilganda landing'da qizil xabar chiqishi kerak.
+
+- [x] UYSOT'ga kirilmagan mijoz: UYSOT login'dan keyin ruxsat sahifasiga QAYTARMAYDI (foydalanuvchi
+      tekshirgan) — tugma ostida va FAQ'da "kirib, qayta bosing".
+- [x] Hisobi yo'q mijoz: UYSOT'da ro'yxatdan o'tish yo'q — "UYSOT hisobingiz yo'qmi?" oynasi
+      (@Uysot_Support Telegram / uysot.uz).
 
 ## 2. Backend o'zgarishlari (monorepo, `adham` branch — COMMIT QILINMAGAN)
 
