@@ -1,5 +1,5 @@
-import { useState, type CSSProperties, type ReactNode } from 'react';
-import { AlertCircle, ArrowRight, ArrowUpRight } from 'lucide-react';
+import { useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { AlertCircle, ArrowRight, ArrowUpRight, Globe, Send, X } from 'lucide-react';
 import { config, installUrl } from '../config';
 import { failureMessage, readInstallFailure, returnToUrl } from '../lib/install-state';
 import { useInstalled, useReveal } from '../lib/hooks';
@@ -94,11 +94,96 @@ export function SmartButton({ size = 'lg', withHint = false, className = '' }: S
               </button>
             </>
           ) : (
-            'UYSOT ruxsat sahifasi ochiladi · taxminan 1 daqiqa'
+            <>
+              UYSOT ruxsat sahifasi ochiladi. Kirish so‘ralsa — kirib, tugmani qayta bosing.
+              <br />
+              <NoAccountLink />
+            </>
           )}
         </p>
       )}
     </div>
+  );
+}
+
+/**
+ * "UYSOT hisobim yo'q" — UYSOT'da ochiq ro'yxatdan o'tish YO'Q (hisobni UYSOT jamoasi
+ * ochadi), shuning uchun mijoz o'zi tanlaydi: UYSOT rasmiy sayti yoki qo'llab-quvvatlash.
+ * Oyna — nativ <dialog>: fokus ichida qoladi, Esc va fon bosilsa yopiladi.
+ */
+function NoAccountLink() {
+  const ref = useRef<HTMLDialogElement>(null);
+  const close = () => ref.current?.close();
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => ref.current?.showModal()}
+        className="mt-1 text-fg-muted underline decoration-line-strong underline-offset-4 hover:text-fg"
+      >
+        UYSOT hisobingiz yo‘qmi?
+      </button>
+
+      <dialog
+        ref={ref}
+        aria-labelledby="no-account-title"
+        onClick={(e) => e.target === ref.current && close()}
+        className="m-auto w-[calc(100%-2rem)] max-w-md rounded-2xl border border-line bg-ink-900 p-0 text-left text-fg shadow-[0_30px_80px_-20px_rgba(15,23,42,0.45)] backdrop:bg-[#0F172A]/40 backdrop:backdrop-blur-[2px] open:animate-[modalIn_.35s_cubic-bezier(0.22,1,0.36,1)]"
+      >
+        <div className="p-6 sm:p-7">
+          <div className="flex items-start justify-between gap-4">
+            <h2 id="no-account-title" className="text-lg font-semibold tracking-tight">
+              UYSOT hisobingiz yo‘qmi?
+            </h2>
+            <button
+              type="button"
+              onClick={close}
+              aria-label="Yopish"
+              className="-mr-1 -mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-fg-dim transition hover:bg-ink-850 hover:text-fg"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+          <p className="mt-2 text-sm leading-relaxed text-fg-muted">
+            Pulse UYSOT CRM ichida ishlaydi. Hisobni UYSOT jamoasi ochib beradi — qulay yo‘lni tanlang.
+          </p>
+
+          <div className="mt-6 grid gap-2.5">
+            <ChoiceLink
+              href={config.supportTelegram}
+              icon={<Send className="h-4 w-4" />}
+              title="Telegram’da yozish"
+              text="UYSOT qo‘llab-quvvatlash xodimi ulanishga yordam beradi"
+            />
+            <ChoiceLink
+              href={config.uysotSite}
+              icon={<Globe className="h-4 w-4" />}
+              title="UYSOT rasmiy sayti"
+              text="UYSOT CRM haqida batafsil ma’lumot"
+            />
+          </div>
+        </div>
+      </dialog>
+    </>
+  );
+}
+
+function ChoiceLink({ href, icon, title, text }: { href: string; icon: ReactNode; title: string; text: string }) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      className="group flex items-center gap-3.5 rounded-xl border border-line bg-ink-950 p-3.5 transition hover:border-line-strong hover:bg-ink-900"
+    >
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent-soft text-accent">{icon}</span>
+      <span className="min-w-0 flex-1">
+        <span className="block text-[15px] font-medium text-fg">{title}</span>
+        <span className="block text-[13px] text-fg-muted">{text}</span>
+      </span>
+      <ArrowUpRight className="h-4 w-4 shrink-0 text-fg-dim transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-fg" />
+    </a>
   );
 }
 

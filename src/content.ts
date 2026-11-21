@@ -458,7 +458,7 @@ export const SHOWCASE: Slide[] = [
 export const STEPS = [
   {
     title: 'Tugmani bosing',
-    text: 'Siz UYSOT’ning rasmiy ruxsat sahifasiga o‘tasiz. UYSOT’ga kirmagan bo‘lsangiz, avval kirish sahifasi ochiladi.',
+    text: 'Siz UYSOT’ning rasmiy ruxsat sahifasiga o‘tasiz. UYSOT’ga kirmagan bo‘lsangiz — avval kiring, keyin tugmani qayta bosing.',
   },
   {
     title: 'Ruxsat bering',
@@ -503,7 +503,11 @@ export const FAQS = [
   },
   {
     q: 'UYSOT hisobim yo‘q bo‘lsa-chi?',
-    a: 'Tugmani bosganingizda UYSOT avval kirish sahifasini ochadi. Kirganingizdan so‘ng ruxsat sahifasiga qaytasiz.',
+    a: 'Pulse UYSOT CRM ichida ishlaydi, hisobni esa UYSOT jamoasi ochib beradi. Tugma ostidagi “UYSOT hisobingiz yo‘qmi?” orqali UYSOT qo‘llab-quvvatlashiga Telegram’da yozing yoki rasmiy saytga o‘ting.',
+  },
+  {
+    q: 'Tugmani bossam, UYSOT kirish sahifasi ochildi.',
+    a: 'Demak shu brauzerda UYSOT’ga kirilmagan. Login va parolingiz bilan kiring, keyin shu sahifaga qaytib tugmani yana bir marta bosing — ruxsat sahifasi ochiladi.',
   },
   {
     q: 'Pulse ma’lumotlarimni o‘zgartira oladimi?',

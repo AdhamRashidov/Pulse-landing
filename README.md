@@ -22,7 +22,8 @@ npm run build      # dist/ — VITE_API_BASE berilmasa build TO'XTAYDI (ataylab)
 |---|---|
 | `VITE_API_BASE` | Pulse backend manzili. **Majburiy** (production). |
 | `VITE_UYSOT_IFRAME_URL` | UYSOT ichidagi Pulse sahifasi (standart `https://app.uysot.uz/boss/iframe/82`). |
-| `VITE_SUPPORT_TELEGRAM` | Qo'llab-quvvatlash havolasi. |
+| `VITE_SUPPORT_TELEGRAM` | Qo'llab-quvvatlash havolasi (standart `t.me/Uysot_Support`). |
+| `VITE_UYSOT_SITE` | UYSOT rasmiy sayti (standart `https://uysot.uz`). |
 
 ## Bitta "aqlli" tugma
 
@@ -32,7 +33,8 @@ Sahifadagi barcha harakat tugmalari bitta komponent — `SmartButton` (`src/comp
 |---|---|---|
 | Pulse shu brauzerda ulanmagan | **UYSOT'ga ulash** | `{API}/api/oauth/install?returnTo={landing}/?installed=1` |
 | Ulangan | **Pulse'ni ochish** | `VITE_UYSOT_IFRAME_URL` |
-| UYSOT hisobi yo'q | — | UYSOT o'zi avval kirish sahifasini ochadi, keyin ruxsatga qaytaradi |
+| UYSOT'ga kirilmagan | **UYSOT'ga ulash** | UYSOT kirish sahifasini ochadi; login'dan keyin ruxsat sahifasiga QAYTARMAYDI (tekshirilgan) — mijoz tugmani qayta bosadi (tugma ostida yozilgan) |
+| UYSOT hisobi yo'q | "UYSOT hisobingiz yo'qmi?" oynasi | UYSOT'da ochiq ro'yxatdan o'tish YO'Q — Telegram (`VITE_SUPPORT_TELEGRAM`) yoki rasmiy sayt (`VITE_UYSOT_SITE`) |
 | Rad etildi / xato | **UYSOT'ga ulash** + qizil xabar | backend `/?installed=1&reason=…` ga qaytaradi — belgi QO'YILMAYDI |
 
 Oqim: tugma → UYSOT ruxsat sahifasi → backend tokenni saqlaydi → `/?installed=1` ga qaytaradi →

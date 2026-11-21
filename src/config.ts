@@ -9,7 +9,10 @@ export const config = {
   apiBase: ((env.VITE_API_BASE as string | undefined) ?? '').replace(/\/+$/, ''),
   /** UYSOT CRM ichidagi Pulse sahifasi. */
   iframeUrl: (env.VITE_UYSOT_IFRAME_URL as string | undefined) || 'https://app.uysot.uz/boss/iframe/82',
-  supportTelegram: (env.VITE_SUPPORT_TELEGRAM as string | undefined) || 'https://t.me/uysot_pulse_support',
+  /** UYSOT qo'llab-quvvatlash Telegram'i — yordam va "UYSOT hisobim yo'q" oynasi. */
+  supportTelegram: (env.VITE_SUPPORT_TELEGRAM as string | undefined) || 'https://t.me/Uysot_Support',
+  /** UYSOT rasmiy sayti — hisobi yo'q mijoz uchun (UYSOT'da ochiq ro'yxatdan o'tish YO'Q). */
+  uysotSite: (env.VITE_UYSOT_SITE as string | undefined) || 'https://uysot.uz',
 };
 
 /**
