@@ -1,47 +1,36 @@
-import { Zap, ExternalLink } from 'lucide-react';
-import { NAV_ITEMS } from '../constants/landingData';
+import { NAV } from '../content';
 import { config } from '../config';
+import { Logo } from './ui';
 
 export function Footer() {
   return (
-    <footer className="border-t border-slate-900 bg-slate-950 py-10 text-xs text-slate-500">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pb-6 border-b border-slate-900">
-          <div className="flex items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-cyan-500 text-slate-950 font-bold">
-              <Zap className="h-4 w-4 fill-current" />
-            </div>
-            <span className="font-bold text-white text-sm">Pulse</span>
-            <span className="text-slate-500 font-medium">for UYSOT CRM</span>
-          </div>
+    <footer className="border-t border-line py-12">
+      <div className="page flex flex-col gap-10 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <Logo />
+          <p className="mt-4 max-w-xs text-sm text-fg-dim">UYSOT CRM uchun sotuv analitikasi.</p>
+        </div>
 
-          <div className="flex items-center gap-6">
-            {NAV_ITEMS.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                className="hover:text-white transition"
-              >
-                {item.label}
-              </a>
-            ))}
-          </div>
-
+        <nav aria-label="Pastki menyu" className="grid grid-cols-2 gap-x-12 gap-y-3 text-sm">
+          {NAV.map((item) => (
+            <a key={item.href} href={item.href} className="text-fg-muted transition hover:text-fg">
+              {item.label}
+            </a>
+          ))}
           <a
-            href={config.iframeUrl}
+            href={config.supportTelegram}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-slate-400 hover:text-white transition"
+            className="text-fg-muted transition hover:text-fg"
           >
-            <span>UYSOT Kabineti (iframe/82)</span>
-            <ExternalLink className="h-3 w-3" />
+            Telegram
           </a>
-        </div>
+        </nav>
+      </div>
 
-        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-600">
-          <div>© {new Date().getFullYear()} Pulse. Barcha huquqlar himoyalangan.</div>
-          <div>UYSOT Marketplace Rasmiy Ilovasi</div>
-        </div>
+      <div className="page mt-12 flex flex-col gap-2 border-t border-line pt-6 text-xs text-fg-dim sm:flex-row sm:justify-between">
+        <span>© {new Date().getFullYear()} Pulse</span>
+        <span>UYSOT CRM bilan ishlaydi</span>
       </div>
     </footer>
   );

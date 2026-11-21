@@ -26,3 +26,6 @@ dist-ssr
 .env
 .env.local
 .env.*.local
+
+# Dizayn namunalari (boshqa dizaynerlarniki — faqat tahlil uchun, commit qilinmaydi)
+docs/refs/

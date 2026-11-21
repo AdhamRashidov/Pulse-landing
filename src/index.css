@@ -4,14 +4,72 @@
 
 @layer base {
   html {
+    background-color: #fafaf9;
+    color: #0b0b0c;
     scroll-behavior: smooth;
-    background-color: #020617;
-    color: #f8fafc;
+    -webkit-text-size-adjust: 100%;
   }
 
   body {
-    background-color: #020617;
+    background-color: #fafaf9;
     overflow-x: hidden;
+    font-feature-settings: 'ss01', 'cv11';
+  }
+
+  ::selection {
+    background: rgba(8, 145, 178, 0.18);
+    color: #0b0b0c;
+  }
+
+  :focus-visible {
+    outline: 2px solid #0891b2;
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  /* Sticky nav ostida qolmasin */
+  section[id] {
+    scroll-margin-top: 5rem;
+  }
+}
+
+@layer components {
+  .page {
+    @apply mx-auto w-full max-w-page px-4 sm:px-6 lg:px-8;
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-fg-dim;
+  }
+
+  .h2 {
+    @apply text-[2rem] font-semibold leading-[1.06] tracking-tightest text-fg sm:text-5xl;
+  }
+
+  .card {
+    @apply rounded-2xl border border-line bg-ink-900;
+  }
+
+  /* Mahsulot skrinshoti — ramkasiz, sahifaning bir qismi (Attio uslubi) */
+  .shot {
+    @apply overflow-hidden rounded-xl border border-line-strong bg-ink-900;
+    box-shadow:
+      0 1px 2px rgba(11, 11, 12, 0.04),
+      0 24px 64px -24px rgba(15, 23, 42, 0.22);
+  }
+
+  /* Ekranga kirganda paydo bo'lish (useReveal) */
+  .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: var(--delay, 0ms);
+  }
+  .reveal[data-visible='true'] {
+    opacity: 1;
+    transform: none;
   }
 }
 
@@ -24,7 +82,127 @@
     display: none;
   }
 
-  .bg-radial-gradient {
-    background: radial-gradient(circle at 50% 0%, rgba(6, 182, 212, 0.08) 0%, rgba(2, 6, 23, 0.6) 70%);
+  /* Konstruktiv to'r — skrinshot ortidan chiqib turadigan chiziqlar */
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, rgba(11, 11, 12, 0.06) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(11, 11, 12, 0.06) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+
+  .text-gradient {
+    background: linear-gradient(180deg, #0b0b0c 0%, #6b7078 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  input[type='range'].range {
+    @apply h-1 w-full cursor-pointer appearance-none rounded-full bg-ink-700 accent-accent;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Yoy-karusel progress chizig'i (ArcShowcase) */
+@keyframes progress {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+/* Tutorial (Tutorial.tsx): menyu o'z joyida ochiladi, modal markazda, bosish belgisi */
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes dimIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes clickRing {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.6);
+  }
+}
+
+@keyframes cursorIn {
+  0% {
+    opacity: 0;
+    transform: translate(18px, 22px);
+  }
+  20%,
+  70% {
+    opacity: 1;
+    transform: none;
+  }
+  100% {
+    opacity: 0;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  /* Progress chizig'i — vaqt o'lchovi, bezak emas: qisqartirilsa slaydlar to'xtovsiz almashardi */
+  .progress-fill {
+    animation-duration: 5500ms !important;
   }
 }

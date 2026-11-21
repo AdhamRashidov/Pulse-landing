@@ -1,29 +1,29 @@
-import { Navbar } from './components/Navbar';
+import { Nav } from './components/Nav';
 import { Hero } from './components/Hero';
-import { BannerShowcase } from './components/BannerShowcase';
-import { Features } from './components/Features';
-import { RoiCalculator } from './components/RoiCalculator';
-import { HowItWorks } from './components/HowItWorks';
+import { Questions } from './components/Questions';
+import { Tutorial } from './components/Tutorial';
+import { How } from './components/How';
+import { Trust } from './components/Trust';
+import { Calculator } from './components/Calculator';
 import { Faq } from './components/Faq';
-import { CtaBanner } from './components/CtaBanner';
+import { FinalCta } from './components/FinalCta';
 import { Footer } from './components/Footer';
 
 export function App() {
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 selection:bg-cyan-500 selection:text-slate-950 flex flex-col font-sans antialiased">
-      <Navbar />
+    <div className="flex min-h-screen flex-col bg-ink-950 font-sans text-fg antialiased">
+      <Nav />
       <main className="flex-1">
         <Hero />
-        <BannerShowcase />
-        <Features />
-        <RoiCalculator />
-        <HowItWorks />
+        <Questions />
+        <Tutorial />
+        <How />
+        <Trust />
+        <Calculator />
         <Faq />
-        <CtaBanner />
+        <FinalCta />
       </main>
       <Footer />
     </div>
   );
 }
-
-export default App;

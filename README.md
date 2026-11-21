@@ -1,132 +1,117 @@
-# ⚡ Pulse — UYSOT CRM uchun Rasmiy Landing Sahifasi
+# Pulse — landing sahifasi
 
-Ushbu papka — **Pulse** analitika tizimi uchun mutlaqo mustaqil, alohida Git repozitoriy va alohida serverda (Vercel, Cloudflare, Railway yoki Nginx) ishga tushirish uchun tayyorlangan **Landing Page** loyihasidir.
+UYSOT CRM uchun Pulse analitikasining tashqi sahifasi. Ikki vazifasi bor:
 
-SOLID va DRY tamoyillari asosida modulli, toza arxitekturada qurilgan.
+1. Reklama va qidiruvdan kelgan rahbarga Pulse'ni ko'rsatish.
+2. Support/sotuv jamoasi Telegramda bitta havola beradi — mijoz **bitta tugma** bilan Pulse'ni UYSOT'ga ulaydi.
 
----
+Login, ro'yxatdan o'tish yoki parol YO'Q: Pulse UYSOT ichida iframe bo'lib ochiladi va foydalanuvchini UYSOT orqali taniydi.
 
-## 🎯 Maqsadi va Asosiy Vazifasi
+React 18 · Vite 5 · Tailwind 3 · TypeScript. Statik sayt (Vercel).
 
-1. **Mijozlarni jalb qilish:** Google qidiruv, Telegram, reklama kanallari yoki savdo bo'limi orqali kelgan barcha mijozlarga Pulse imkoniyatlarini ko'rgazmali va ta'sirchan tarzda taqdim etish.
-2. **1-bosqichli OAuth O'rnatish:** Mijoz *"UYSOT'ga o'rnatish"* tugmasini bosganda, tizim uni UYSOT'ning rasmiy xavfsiz OAuth sahifasiga yo'naltiradi. Mijoz ruxsat berishi bilan, backend tokenlarni ulab, mijozni to'g'ridan-to'g'ri `https://app.uysot.uz/boss/iframe/82` (UYSOT ichidagi Pulse analitikasi) ga olib boradi.
-3. **Mavjud mijozlar uchun qulaylik:** Allaqachon o'rnatilgan mijozlar *"CRM'da ochish"* tugmasi orqali to'g'ridan-to'g'ri o'z kabinetlariga o'tadilar.
-4. **Ro'yxatdan o'tmaganlar:** Agar foydalanuvchida hali UYSOT hisobi bo'lmasa, UYSOT OAuth avtomatik ravishda login/register oynasiga o'tkazadi va kiritgandan so'ng yana Pulse ruxsatiga qaytaradi.
+## Ishga tushirish
 
----
+```bash
+cp .env.example .env
+npm install
+npm run dev        # http://localhost:3000
+npm run build      # dist/ — VITE_API_BASE berilmasa build TO'XTAYDI (ataylab)
+```
 
-## 🛠️ Texnologiyalar va Arxitektura
+| O'zgaruvchi | Vazifasi |
+|---|---|
+| `VITE_API_BASE` | Pulse backend manzili. **Majburiy** (production). |
+| `VITE_UYSOT_IFRAME_URL` | UYSOT ichidagi Pulse sahifasi (standart `https://app.uysot.uz/boss/iframe/82`). |
+| `VITE_SUPPORT_TELEGRAM` | Qo'llab-quvvatlash havolasi. |
 
-* **React 18 + Vite 5** (chaqmoqdek tez yuklanish, HMR)
-* **Tailwind CSS 3.4** (brend ranglar, chiroyli gradientlar, adaptiv dizayn)
-* **Lucide React** (zamonaviy SVG ikonlar)
-* **TypeScript** (to'liq qat'iy tipizatsiya, 0 xatolik)
-* **SOLID & DRY Modulli Komponentlar:**
-  - `Navbar.tsx` — responsiv navigatsiya va menyu
-  - `Hero.tsx` — asosiy chaqiriq, ishonch belgilari va tugmalar
-  - `DashboardPreview.tsx` — 5 ta bo'limli interaktiv tahlil oynasi va skrinshotlar
-  - `Features.tsx` — 6 ta asosiy tahliliy imkoniyatlar kartalari
-  - `RoiCalculator.tsx` — Yo'qotilgan lidlar va tushum kalkulyatori
-  - `WhyPulse.tsx` — 15-30ms tezlik, iframe va bank darajasidagi xavfsizlik
-  - `HowItWorks.tsx` — 3 bosqichli vizual ulanish qo'llanmasi
-  - `Faq.tsx` — savol-javoblar akordeoni va support bloki
-  - `CtaBanner.tsx` — yuqori konversiyali yakuniy harakat bloki
-  - `Footer.tsx` — barcha havolalar va mualliflik huquqi
+## Bitta "aqlli" tugma
 
----
+Sahifadagi barcha harakat tugmalari bitta komponent — `SmartButton` (`src/components/ui.tsx`):
 
-## 🖼️ Skrinshotlar Papkasi (`public/images/`)
+| Holat | Tugma | Qayerga |
+|---|---|---|
+| Pulse shu brauzerda ulanmagan | **UYSOT'ga ulash** | `{API}/api/oauth/install?returnTo={landing}/?installed=1` |
+| Ulangan | **Pulse'ni ochish** | `VITE_UYSOT_IFRAME_URL` |
+| UYSOT hisobi yo'q | — | UYSOT o'zi avval kirish sahifasini ochadi, keyin ruxsatga qaytaradi |
+| Rad etildi / xato | **UYSOT'ga ulash** + qizil xabar | backend `/?installed=1&reason=…` ga qaytaradi — belgi QO'YILMAYDI |
 
-Interfeys skrinshotlarini `public/images/` papkasiga quyidagi nomlar bilan yuklashingiz mumkin:
+Oqim: tugma → UYSOT ruxsat sahifasi → backend tokenni saqlaydi → `/?installed=1` ga qaytaradi →
+landing shu brauzerda belgi qo'yadi (`localStorage: pulse:installed`) va **darhol** CRM'ga o'tkazadi
+(`src/lib/install-state.ts`, render'dan oldin).
 
-| Fayl nomi | Joylashuvi va Tavsifi |
-| :--- | :--- |
-| `hero-dashboard.png` | Asosiy Dashboard skrinshoti |
-| `tab-speed.png` | Speed-to-Lead (Birinchi aloqa tezligi & 🔥 Issiq lidlar) oynasi |
-| `tab-plan.png` | Plan / Fakt va maqsadlar monitoringi oynasi |
-| `tab-calls.png` | Qo'ng'iroqlar xaritasi (Heatmap) oynasi |
-| `tab-marketing.png` | Marketing kanallari & ROI hisoboti |
-| `tab-leads.png` | Lidlar & Konversiya hisoboti oynasi |
-| `og-preview.png` | Telegram / WhatsApp'da havola yuborilganda chiquvchi rasm (1200x630) |
+Landing alohida domenda — unda token yo'q, shuning uchun "ulanganmi" faqat shu brauzer belgisidan
+bilinadi. Boshqa qurilmada tugma yana "Ulash" bo'ladi — bu xavfsiz, qayta ulanish o'rnatmani yangilaydi.
 
-> 💡 **Avtomatik Fallback:** Agar rasmlar hali yuklanmagan bo'lsa ham, sayt buzilmaydi — u avtomatik ravishda juda chiroyli va real ma'lumotlarga ega interaktiv qorong'i rejimdagi (Dark UI) vizual maketlarni ko'rsatib turadi!
-
----
-
-## ⚙️ Sozlamalar (`.env`)
-
-Loyihada `.env` fayli orqali asosiy manzillar boshqariladi:
+⚠️ **Backend sozlamasi (MAJBURIY):** backend `returnTo` ni faqat ruxsat etilgan domenlarga
+qabul qiladi (open redirect himoyasi). Landing domenini qo'shing:
 
 ```env
-# Pulse backend API manzili (OAuth o'rnatish oqimi uchun)
-VITE_API_BASE=https://pulse-api.up.railway.app
-
-# UYSOT CRM kabinetidagi Pulse iframe manzili
-VITE_UYSOT_IFRAME_URL=https://app.uysot.uz/boss/iframe/82
-
-# Telegram qo'llab-quvvatlash manzili
-VITE_SUPPORT_TELEGRAM=https://t.me/uysot_pulse_support
+# apps/api (Railway)
+OAUTH_RETURN_TO_ORIGINS=https://<landing-domeni>
 ```
 
----
+Qo'shilmasa o'rnatish baribir ishlaydi, lekin foydalanuvchi landing'ga qaytmaydi — belgi qo'yilmaydi
+va tugma "Ulash" bo'lib qolaveradi.
 
-## 🚀 Mahalliy Ishga Tushirish (Development)
+## Matn — `src/content.ts`
 
-```bash
-# 1. Landing papkasiga o'tish
-cd landing
+Sahifadagi barcha matn shu faylda. **Qoida:** faqat Pulse'da haqiqatan bor narsa yoziladi —
+o'rnatgan mijoz va'da qilingan har bir narsani ilovada topa olishi kerak. Soxta raqam, "ROI",
+"tushum (so'm)" kabi da'volar yo'q (Plan/Fakt pul emas, son sanaydi).
 
-# 2. Bog'liqliklarni o'rnatish
-npm install
+## Dizayn
 
-# 3. Dev serverni ishga tushirish
-npm run dev
+Och uslub (Attio / Relate / ClickUp naqshlari — Figma "TOP-50 WEBSITES" faylidan o'rganilgan):
+Pulse skrinshotlari och, shuning uchun sahifa ham och — mahsulot sahifaga uzilishsiz qo'shiladi.
+Ranglar `tailwind.config.js` da (`ink` — sirtlar, `fg` — matn, `accent` — Pulse cyan).
+
+**Yoy-karusel** (`components/ArcShowcase.tsx`, hero ostida, Kumo uslubi): eng kuchli funksiyalar
+bannerlari yoy bo'ylab, tanlangani markazda kattalashadi, tavsifi pastda; 5.5 s da almashadi.
+Ma'lumot — `content.ts` → `SHOWCASE`, rasmlar — `public/images/up/`.
+
+**Tutorial** (`components/Tutorial.tsx`, `#screens`): har bo'lim qadamma-qadam. Qadam — yangi kadr
+(`scene`; `enter: 'scroll'` — sahifa pastga aylangandek) yoki shu kadr ustida ochiladigan bo'lak
+(`pop`): menyu/hover o'z joyida "ochiladi", modal (`modal: true`) fon qorayib markazda. Keyin kamera
+o'sha joyga yaqinlashadi (`focus`), bosilgan joyda belgi chiqadi (`click`). Avtomatik o'ynaydi
+(faqat ekranda, sichqoncha ustida — pauza). Ma'lumot — `content.ts` → `TUTORIAL`; koordinatalar
+skrinshot pikselida.
+
+## Rasmlar — `images-src/` → `npm run images`
+
+Asl skrinshotlar `images-src/tutorial/<bo'lim>/` da (PNG, Pulse'dan, demo kompaniya) — saytga
+chiqmaydi. `npm run images` (`scripts/build-images.mjs`, sharp) ulardan yasaydi:
+
+| Natija | Nima |
+|---|---|
+| `public/images/t/<bo'lim>/*.webp` | tutorial kadrlari (WebP; modallar fonsiz kesilgan) |
+| `public/images/up/*.webp` | karusel bannerlari (1200×640) |
+| `public/images/og.jpg` | Telegram/ijtimoiy tarmoq havola rasmi (1200×630) |
+| `src/media.gen.ts` | o'lchamlar va bo'laklarning asosiy kadrdagi joyi |
+
+Ochilgan menyu skrinshoti asosiy ekrandan kesilgan bo'lsa, uning joyi avtomatik topiladi
+(kontur bo'yicha qidiruv, natijasi konsolda "mos: N%"). Menyu bo'lakning deyarli hammasini
+egallasa, joy skriptda qo'lda beriladi (`at`). Yangi rasm qo'shish: faylni `images-src/` ga
+qo'ying → skriptdagi `TUTORIAL`/`BANNERS` ro'yxatiga yozing → `npm run images` →
+`content.ts` da qadam qo'shing.
+
+Qoidalar: haqiqiy mijoz ma'lumoti ko'rinmasin, scrollbar va kursor tushmasin; bitta bo'limning
+ochilgan holatlari asosiy ekran bilan bir xil masshtabda olinsin.
+
+## Tuzilish
+
+```
+src/
+  content.ts            barcha matn
+  config.ts             env + installUrl()
+  lib/install-state.ts  "ulangan" belgisi va /?installed=1 ni ushlash
+  lib/hooks.ts          useInstalled, useReveal
+  components/ui.tsx     Logo, SmartButton, zoomTransform, Reveal, SectionHead
+  components/*.tsx      bo'limlar: Nav, Hero (+ArcShowcase), Questions, Tutorial, How, Trust, Calculator, Faq, FinalCta, Footer
+  media.gen.ts          rasmlar ro'yxati (npm run images yasaydi)
 ```
 
-Brauzerda `http://localhost:3000` manzilida ochiladi.
+`docs/refs/` — dizayn namunalari (faqat tahlil uchun, `.gitignore` da).
 
----
+## Vercel
 
-## 📦 Production Build
-
-```bash
-npm run build
-```
-
-Natija `dist/` papkasiga yig'iladi va 100% toza static HTML/CSS/JS hosil bo'ladi.
-
----
-
-## 📤 Alohida Git Repozitoriyga Chiqarish va GitHub'ga Yuklash
-
-Ushbu papkani alohida Git repozitoriyga aylantirish va shaxsiy/korporativ GitHub'ga yuklash:
-
-```bash
-cd landing
-
-# 1. Yangi git repo boshlash
-git init
-git add .
-git commit -m "feat: initial commit for Pulse standalone landing page"
-
-# 2. GitHub repongiz manzilini ulash
-git remote add origin https://github.com/<YOUR_USERNAME>/pulse-landing.git
-git branch -M main
-git push -u origin main
-```
-
----
-
-## 🌐 Vercel'ga Deploy Qilish
-
-1. [vercel.com](https://vercel.com) ga kiring.
-2. **"Add New Project"** tugmasini bosing va GitHub'dagi `pulse-landing` repongizni tanlang.
-3. Sozlamalar avtomatik aniqlanadi:
-   - Framework Preset: **Vite**
-   - Build Command: `npm run build`
-   - Output Directory: `dist`
-4. **Environment Variables** bo'limida quyidagilarni kiriting:
-   - `VITE_API_BASE`: `https://pulse-api.up.railway.app`
-   - `VITE_UYSOT_IFRAME_URL`: `https://app.uysot.uz/boss/iframe/82`
-   - `VITE_SUPPORT_TELEGRAM`: `https://t.me/uysot_pulse_support`
-5. **"Deploy"** tugmasini bosing — 30 soniyada domen tayyor bo'ladi!
+Framework: Vite · Build: `npm run build` · Output: `dist` · Environment Variables: yuqoridagi uchtasi.
