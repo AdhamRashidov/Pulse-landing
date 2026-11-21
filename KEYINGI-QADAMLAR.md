@@ -24,15 +24,12 @@ manzilini kutyapti.** Quyidagilar qolgan — tartib bo'yicha.
 - [x] Hisobi yo'q mijoz: UYSOT'da ro'yxatdan o'tish yo'q — "UYSOT hisobingiz yo'qmi?" oynasi
       (@Uysot_Support Telegram / uysot.uz).
 
-## 2. Backend o'zgarishlari (monorepo, `adham` branch — COMMIT QILINMAGAN)
+## 2. Backend o'zgarishlari — PROD'DA (2026-11-21)
 
-- `apps/api/src/oauth/return-to.ts` (+spec) — `returnTo` whitelist (open redirect himoyasi).
-- `apps/api/src/oauth/oauth.controller.ts` (+`oauth.controller.spec.ts`) — xato bo'lsa ham mijoz
-  landing'ga `reason` bilan qaytadi (ilgari `apps/web` dagi xato sahifasiga tushardi).
-- `config.ts`, `.env.example` — `OAUTH_RETURN_TO_ORIGINS`; `CLAUDE.md` yangilangan.
-- [ ] `main`ga merge'dan OLDIN to'liq gate (CLAUDE.md): `npm run typecheck`, `npm test`,
-      `npm run lint`, `npm run build`. Hozircha faqat OAuth testlari (47/47) va api typecheck o'tgan.
-- [ ] `config.ts:34` dagi eskirgan `redirect_url` izohini tuzatish.
+- [x] `returnTo` whitelist + xatoda landing'ga `reason` bilan qaytish — monorepo `main` (Railway).
+- [x] Merge'dan oldingi gate: typecheck 0, lint 0 (38 eski xato tuzatildi), test 1122/1122, build 0.
+- [ ] `config.ts:34` dagi eskirgan `redirect_url` izohi.
+- Git: har repo o'z akkaunti bilan (lokal `git config`) — monorepo korporativ, landing shaxsiy.
 
 ## 3. Tekshirish kerak
 
